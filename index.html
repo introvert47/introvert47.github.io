@@ -8,368 +8,167 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
   <style>
-    * {
-      font-family: 'Inter', sans-serif;
-      cursor: none;
-    }
-    
-    body {
-      background: #0a0a0a;
-      color: #fafafa;
+    /* ----- FIX: prevent horizontal overflow on mobile ----- */
+    *{font-family:'Inter',sans-serif;cursor:none}
+    body, html {
+      background:#0a0a0a;
+      color:#fafafa;
       overflow-x: hidden;
       width: 100%;
       position: relative;
     }
-    
-    /* Fix horizontal overflow for all containers */
-    html, body {
-      max-width: 100%;
-      overflow-x: hidden;
-    }
-    
     section, .max-w-7xl, .container {
       overflow-x: hidden;
     }
-    
+
     /* Loading Screen */
-    .loader {
-      position: fixed;
-      inset: 0;
-      z-index: 999999;
-      background: #0a0a0a;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      transition: opacity .6s ease, visibility .6s ease;
-    }
-    .loader.done {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-    .loader-name {
-      font-size: 3rem;
-      font-weight: 900;
-      letter-spacing: -.04em;
-      overflow: hidden;
-    }
-    .loader-name span {
-      display: inline-block;
-      transform: translateY(110%);
-      animation: loaderReveal .6s cubic-bezier(.16,1,.3,1) forwards;
-    }
-    .loader-bar {
-      width: 120px;
-      height: 2px;
-      background: #262626;
-      border-radius: 999px;
-      overflow: hidden;
-      margin-top: 1.5rem;
-    }
-    .loader-bar-inner {
-      width: 0%;
-      height: 100%;
-      background: #a3e635;
-      border-radius: 999px;
-      animation: loaderFill 2s ease-in-out forwards;
-    }
-    @keyframes loaderReveal {
-      to { transform: translateY(0); }
-    }
-    @keyframes loaderFill {
-      to { width: 100%; }
-    }
-    
+    .loader{position:fixed;inset:0;z-index:999999;background:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s ease,visibility .6s ease}
+    .loader.done{opacity:0;visibility:hidden;pointer-events:none}
+    .loader-name{font-size:3rem;font-weight:900;letter-spacing:-.04em;overflow:hidden}
+    .loader-name span{display:inline-block;transform:translateY(110%);animation:loaderReveal .6s cubic-bezier(.16,1,.3,1) forwards}
+    .loader-bar{width:120px;height:2px;background:#262626;border-radius:999px;overflow:hidden;margin-top:1.5rem}
+    .loader-bar-inner{width:0%;height:100%;background:#a3e635;border-radius:999px;animation:loaderFill 2s ease-in-out forwards}
+    @keyframes loaderReveal{to{transform:translateY(0)}}
+    @keyframes loaderFill{to{width:100%}}
+
     /* Cursor */
-    .cursor-dot {
-      width: 8px;
-      height: 8px;
-      background: #a3e635;
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 99999;
-      transition: transform .08s ease;
-      mix-blend-mode: difference;
-    }
-    .cursor-ring {
-      width: 40px;
-      height: 40px;
-      border: 1.5px solid rgba(163, 230, 53, .4);
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 99998;
-      transition: all .12s ease-out;
-      mix-blend-mode: difference;
-    }
-    .cursor-ring.hover {
-      width: 64px;
-      height: 64px;
-      border-color: rgba(163, 230, 53, .7);
-      background: rgba(163, 230, 53, .04);
-    }
-    @media(max-width: 768px) {
-      * { cursor: auto; }
-      .cursor-dot, .cursor-ring { display: none; }
-    }
-    
+    .cursor-dot{width:8px;height:8px;background:#a3e635;border-radius:50%;position:fixed;pointer-events:none;z-index:99999;transition:transform .08s ease;mix-blend-mode:difference}
+    .cursor-ring{width:40px;height:40px;border:1.5px solid rgba(163,230,53,.4);border-radius:50%;position:fixed;pointer-events:none;z-index:99998;transition:all .12s ease-out;mix-blend-mode:difference}
+    .cursor-ring.hover{width:64px;height:64px;border-color:rgba(163,230,53,.7);background:rgba(163,230,53,.04)}
+    @media(max-width:768px){*{cursor:auto}.cursor-dot,.cursor-ring{display:none}}
+
     /* Scroll Progress */
-    .scroll-progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 3px;
-      background: linear-gradient(90deg, #a3e635, #84cc16, #65a30d, #a3e635);
-      background-size: 300% 100%;
-      animation: gradientShift 3s ease infinite;
-      z-index: 99999;
-      border-radius: 0 999px 999px 0;
-      transition: width .05s linear;
-    }
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    
+    .scroll-progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#a3e635,#84cc16,#65a30d,#a3e635);background-size:300% 100%;animation:gradientShift 3s ease infinite;z-index:99999;border-radius:0 999px 999px 0;transition:width .05s linear}
+    @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
     /* Noise Overlay */
-    .noise {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      pointer-events: none;
-      opacity: .03;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    }
-    
+    .noise{position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
     /* Keyframes */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(50px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeInLeft {
-      from { opacity: 0; transform: translateX(-50px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    @keyframes fadeInRight {
-      from { opacity: 0; transform: translateX(50px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    @keyframes scaleIn {
-      from { opacity: 0; transform: scale(.8); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      33% { transform: translateY(-15px) rotate(1deg); }
-      66% { transform: translateY(-8px) rotate(-1deg); }
-    }
-    @keyframes float2 {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-20px) rotate(2deg); }
-    }
-    @keyframes pulseDot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: .3; transform: scale(2.5); }
-    }
-    @keyframes shimmer {
-      0% { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
-    }
-    @keyframes morphBlob {
-      0%, 100% { border-radius: 60% 40% 30% 70%/60% 30% 70% 40%; }
-      25% { border-radius: 30% 60% 70% 40%/50% 60% 30% 60%; }
-      50% { border-radius: 50% 60% 30% 60%/30% 60% 70% 40%; }
-      75% { border-radius: 60% 40% 60% 30%/60% 40% 30% 70%; }
-    }
-    @keyframes borderDance {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    @keyframes meshMove {
-      0% { background-position: 0% 0%; }
-      50% { background-position: 100% 100%; }
-      100% { background-position: 0% 0%; }
-    }
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(50px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeInLeft{from{opacity:0;transform:translateX(-50px)}to{opacity:1;transform:translateX(0)}}
+    @keyframes fadeInRight{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:translateX(0)}}
+    @keyframes scaleIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+    @keyframes float{0%,100%{transform:translateY(0) rotate(0deg)}33%{transform:translateY(-15px) rotate(1deg)}66%{transform:translateY(-8px) rotate(-1deg)}}
+    @keyframes float2{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-20px) rotate(2deg)}}
+    @keyframes pulseDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(2.5)}}
+    @keyframes typing{from{width:0}to{width:100%}}
+    @keyframes blinkCaret{50%{border-color:transparent}}
+    @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    @keyframes spinSlow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+    @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+    @keyframes morphBlob{0%,100%{border-radius:60% 40% 30% 70%/60% 30% 70% 40%}25%{border-radius:30% 60% 70% 40%/50% 60% 30% 60%}50%{border-radius:50% 60% 30% 60%/30% 60% 70% 40%}75%{border-radius:60% 40% 60% 30%/60% 40% 30% 70%}}
+    @keyframes ripple{0%{transform:scale(0);opacity:.5}100%{transform:scale(4);opacity:0}}
+    @keyframes glowPulse{0%,100%{box-shadow:0 0 20px rgba(163,230,53,.15)}50%{box-shadow:0 0 50px rgba(163,230,53,.35),0 0 100px rgba(163,230,53,.1)}}
+    @keyframes borderDance{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    @keyframes textGlow{0%,100%{text-shadow:0 0 30px rgba(163,230,53,.2),0 0 60px rgba(163,230,53,.05)}50%{text-shadow:0 0 50px rgba(163,230,53,.4),0 0 100px rgba(163,230,53,.15)}}
+    @keyframes meshMove{0%{background-position:0% 0%}50%{background-position:100% 100%}100%{background-position:0% 0%}}
+    @keyframes lineGrow{from{stroke-dashoffset:1000}to{stroke-dashoffset:0}}
+    @keyframes orbitDot{0%{transform:rotate(0deg) translateX(350px) rotate(0deg)}100%{transform:rotate(360deg) translateX(350px) rotate(-360deg)}}
+    @keyframes orbitDot2{0%{transform:rotate(0deg) translateX(250px) rotate(0deg)}100%{transform:rotate(-360deg) translateX(250px) rotate(360deg)}}
+    @keyframes particleFloat{0%{transform:translateY(0) translateX(0) scale(1);opacity:0}10%{opacity:.6}90%{opacity:.6}100%{transform:translateY(-100vh) translateX(40px) scale(0);opacity:0}}
+
+    .animate-fade-up{animation:fadeInUp .9s cubic-bezier(.16,1,.3,1) forwards}
+    .animate-fade-left{animation:fadeInLeft .9s cubic-bezier(.16,1,.3,1) forwards}
+    .animate-fade-right{animation:fadeInRight .9s cubic-bezier(.16,1,.3,1) forwards}
+    .animate-scale-in{animation:scaleIn .9s cubic-bezier(.16,1,.3,1) forwards}
+    .animate-float{animation:float 7s ease-in-out infinite}
+    .animate-float2{animation:float2 9s ease-in-out infinite}
+    .delay-100{animation-delay:.1s}.delay-200{animation-delay:.2s}.delay-300{animation-delay:.3s}
+    .delay-400{animation-delay:.4s}.delay-500{animation-delay:.5s}.delay-600{animation-delay:.6s}.delay-700{animation-delay:.7s}.delay-800{animation-delay:.8s}
+
+    .obs-hidden{opacity:0}.obs-visible{opacity:1}
+
+    .typing-text{display:inline-block;overflow:hidden;white-space:nowrap;border-right:3px solid #a3e635;animation:typing 2.5s steps(30) forwards,blinkCaret .75s step-end infinite;width:0}
+
+    .mesh-bg{background:linear-gradient(135deg,#0a0a0a 0%,#1a2e05 25%,#0a0a0a 50%,#0d1f0a 75%,#0a0a0a 100%);background-size:400% 400%;animation:meshMove 20s ease infinite}
+
+    .morph-blob{animation:morphBlob 12s ease-in-out infinite}
+    .shimmer-text{background:linear-gradient(90deg,#fafafa 30%,#a3e635 50%,#fafafa 70%);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s ease-in-out infinite}
+    .text-glow-anim{animation:textGlow 3s ease-in-out infinite}
+
+    .card-3d{transition:all .4s cubic-bezier(.16,1,.3,1);transform-style:preserve-3d}
+    .card-3d:hover{transform:translateY(-12px) rotateX(2deg);box-shadow:0 30px 60px -15px rgba(0,0,0,.5),0 0 40px rgba(163,230,53,.05)}
+
+    .gradient-border{position:relative;border-radius:1.5rem;background:#171717}
+    .gradient-border::before{content:'';position:absolute;inset:-2px;border-radius:1.6rem;background:linear-gradient(135deg,#a3e635,#84cc16,#65a30d,#a3e635);background-size:300% 300%;animation:borderDance 4s ease infinite;z-index:-1;opacity:0;transition:opacity .4s ease}
+    .gradient-border:hover::before{opacity:1}
+
+    .glass-dark{background:rgba(23,23,23,.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.05)}
+
+    .link-underline{position:relative}
+    .link-underline::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:linear-gradient(90deg,#a3e635,#84cc16);transition:width .3s ease;border-radius:999px}
+    .link-underline:hover::after{width:100%}
+
+    .ripple-btn{position:relative;overflow:hidden}
+    .ripple-btn .ripple-effect{position:absolute;border-radius:50%;background:rgba(255,255,255,.3);animation:ripple .6s ease-out forwards;pointer-events:none}
+
+    .magnetic-btn{transition:transform .2s ease-out}
+
+    .marquee-track{display:flex;animation:marquee 30s linear infinite;width:max-content}
+    .marquee-track:hover{animation-play-state:paused}
+
+    .particle{position:absolute;width:3px;height:3px;background:#a3e635;border-radius:50%;pointer-events:none;animation:particleFloat linear infinite}
+
+    .stagger-children>*{opacity:0;transform:translateY(25px);transition:all .5s cubic-bezier(.16,1,.3,1)}
+    .stagger-children.in-view>*:nth-child(1){transition-delay:0s;opacity:1;transform:translateY(0)}
+    .stagger-children.in-view>*:nth-child(2){transition-delay:.07s;opacity:1;transform:translateY(0)}
+    .stagger-children.in-view>*:nth-child(3){transition-delay:.14s;opacity:1;transform:translateY(0)}
+    .stagger-children.in-view>*:nth-child(4){transition-delay:.21s;opacity:1;transform:translateY(0)}
+    .stagger-children.in-view>*:nth-child(5){transition-delay:.28s;opacity:1;transform:translateY(0)}
+    .stagger-children.in-view>*:nth-child(6){transition-delay:.35s;opacity:1;transform:translateY(0)}
+    .stagger-children.in-view>*:nth-child(7){transition-delay:.42s;opacity:1;transform:translateY(0)}
+    .stagger-children.in-view>*:nth-child(8){transition-delay:.49s;opacity:1;transform:translateY(0)}
+
+    .glow-line{height:1px;background:linear-gradient(90deg,transparent,rgba(163,230,53,.5),transparent)}
+
+    ::-webkit-scrollbar{width:5px}
+    ::-webkit-scrollbar-track{background:#0a0a0a}
+    ::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#a3e635,#65a30d);border-radius:999px}
+
+    .section-glow-top::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:60%;height:1px;background:linear-gradient(90deg,transparent,rgba(163,230,53,.2),transparent)}
+    .section-glow-bottom::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:60%;height:1px;background:linear-gradient(90deg,transparent,rgba(163,230,53,.2),transparent)}
+
+    .img-glow{position:relative}
+    .img-glow::after{content:'';position:absolute;inset:-2px;background:linear-gradient(135deg,#a3e635,transparent,#84cc16,transparent);border-radius:inherit;z-index:-1;opacity:0;transition:opacity .5s ease;filter:blur(15px)}
+    .img-glow:hover::after{opacity:.6}
+
+    .fact-card{background:linear-gradient(135deg,rgba(163,230,53,.03),rgba(163,230,53,.01));border:1px solid rgba(163,230,53,.08);transition:all .4s ease}
+    .fact-card:hover{background:linear-gradient(135deg,rgba(163,230,53,.08),rgba(163,230,53,.03));border-color:rgba(163,230,53,.2);transform:translateY(-5px)}
+
+    .wave-divider{position:absolute;bottom:-1px;left:0;width:100%;overflow:hidden;line-height:0}
+    .wave-divider svg{display:block;width:calc(100% + 1.3px);height:50px}
     
-    .animate-fade-up { animation: fadeInUp .9s cubic-bezier(.16,1,.3,1) forwards; }
-    .animate-fade-left { animation: fadeInLeft .9s cubic-bezier(.16,1,.3,1) forwards; }
-    .animate-fade-right { animation: fadeInRight .9s cubic-bezier(.16,1,.3,1) forwards; }
-    .animate-scale-in { animation: scaleIn .9s cubic-bezier(.16,1,.3,1) forwards; }
-    .animate-float { animation: float 7s ease-in-out infinite; }
-    .animate-float2 { animation: float2 9s ease-in-out infinite; }
-    .delay-100 { animation-delay: .1s; }
-    .delay-200 { animation-delay: .2s; }
-    .delay-300 { animation-delay: .3s; }
-    .delay-400 { animation-delay: .4s; }
-    .delay-500 { animation-delay: .5s; }
-    
-    .obs-hidden { opacity: 0; }
-    .obs-visible { opacity: 1; }
-    
-    .shimmer-text {
-      background: linear-gradient(90deg, #fafafa 30%, #a3e635 50%, #fafafa 70%);
-      background-size: 200% 100%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: shimmer 4s ease-in-out infinite;
-    }
-    
-    .mesh-bg {
-      background: linear-gradient(135deg, #0a0a0a 0%, #1a2e05 25%, #0a0a0a 50%, #0d1f0a 75%, #0a0a0a 100%);
-      background-size: 400% 400%;
-      animation: meshMove 20s ease infinite;
-    }
-    
-    .morph-blob {
-      animation: morphBlob 12s ease-in-out infinite;
-    }
-    
-    .glass-dark {
-      background: rgba(23, 23, 23, .7);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, .05);
-    }
-    
-    .link-underline {
-      position: relative;
-    }
-    .link-underline::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #a3e635, #84cc16);
-      transition: width .3s ease;
-      border-radius: 999px;
-    }
-    .link-underline:hover::after {
-      width: 100%;
-    }
-    
-    /* Fix for typing text on mobile */
-    .typing-text {
-      display: inline-block;
-      overflow: hidden;
-      white-space: nowrap;
-      border-right: 3px solid #a3e635;
-      animation: typing 2.5s steps(30) forwards, blinkCaret .75s step-end infinite;
-      width: 0;
-    }
-    @keyframes typing {
-      from { width: 0; }
-      to { width: 100%; }
-    }
-    @keyframes blinkCaret {
-      50% { border-color: transparent; }
-    }
-    @media (max-width: 640px) {
-      .typing-text {
-        white-space: normal;
-        border-right: none;
-        animation: none;
-        width: auto;
-        font-size: 0.75rem;
-        display: block;
-        word-break: break-all;
-      }
-    }
-    
-    /* Mobile fixes: hide oversized orbital rings & adjust blobs */
+    /* ----- FIX: hide orbital rings on mobile to prevent overflow ----- */
     @media (max-width: 768px) {
       .orbital-rings-container {
         display: none !important;
       }
       .morph-blob {
-        width: 180px !important;
-        height: 180px !important;
-        opacity: 0.4;
+        max-width: 180px !important;
+        max-height: 180px !important;
       }
       .hero-title {
-        font-size: 2.75rem !important;
+        font-size: 3rem !important;
         line-height: 1.1 !important;
       }
-      .hero-subtitle {
-        font-size: 1rem !important;
-      }
-      .mesh-bg {
-        background-size: 300% 300%;
-      }
-      .glass-dark {
-        backdrop-filter: blur(12px);
+      .typing-text {
+        white-space: normal;
+        border-right: none;
+        animation: none;
+        width: auto;
+        display: inline-block;
+        word-break: break-word;
       }
     }
-    
     @media (max-width: 480px) {
       .hero-title {
         font-size: 2.25rem !important;
       }
-      .typing-text {
-        font-size: 0.7rem;
-      }
       .morph-blob {
-        width: 120px !important;
-        height: 120px !important;
+        max-width: 120px !important;
+        max-height: 120px !important;
       }
-    }
-    
-    .gradient-border {
-      position: relative;
-      border-radius: 1.5rem;
-      background: #171717;
-    }
-    .gradient-border::before {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      border-radius: 1.6rem;
-      background: linear-gradient(135deg, #a3e635, #84cc16, #65a30d, #a3e635);
-      background-size: 300% 300%;
-      animation: borderDance 4s ease infinite;
-      z-index: -1;
-      opacity: 0;
-      transition: opacity .4s ease;
-    }
-    .gradient-border:hover::before {
-      opacity: 1;
-    }
-    
-    .card-3d {
-      transition: all .4s cubic-bezier(.16,1,.3,1);
-      transform-style: preserve-3d;
-    }
-    .card-3d:hover {
-      transform: translateY(-12px) rotateX(2deg);
-      box-shadow: 0 30px 60px -15px rgba(0,0,0,.5), 0 0 40px rgba(163,230,53,.05);
-    }
-    
-    .fact-card {
-      background: linear-gradient(135deg, rgba(163,230,53,.03), rgba(163,230,53,.01));
-      border: 1px solid rgba(163,230,53,.08);
-      transition: all .4s ease;
-    }
-    .fact-card:hover {
-      background: linear-gradient(135deg, rgba(163,230,53,.08), rgba(163,230,53,.03));
-      border-color: rgba(163,230,53,.2);
-      transform: translateY(-5px);
-    }
-    
-    ::-webkit-scrollbar {
-      width: 5px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0a0a0a;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, #a3e635, #65a30d);
-      border-radius: 999px;
     }
   </style>
 </head>
@@ -383,21 +182,29 @@
     <div class="loader-bar"><div class="loader-bar-inner"></div></div>
   </div>
 
+  <!-- Noise -->
   <div class="noise"></div>
+
+  <!-- Cursor -->
   <div class="cursor-dot" id="cursor-dot"></div>
   <div class="cursor-ring" id="cursor-ring"></div>
+
+  <!-- Scroll Progress -->
   <div class="scroll-progress" id="scroll-progress"></div>
+
+  <!-- Particles -->
+  <div id="particles" class="fixed inset-0 pointer-events-none z-0"></div>
 
   <!-- Navigation -->
   <nav class="fixed top-0 left-0 right-0 z-50 glass-dark transition-all duration-500" id="navbar">
     <div class="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
-      <a href="#" class="text-lg font-black tracking-tight">H<span class="text-lime-400">.</span>N</a>
+      <a href="#" class="text-lg font-black tracking-tight magnetic-btn">H<span class="text-lime-400">.</span>N</a>
       <div class="hidden md:flex items-center gap-8">
-        <a href="#about" class="text-sm text-neutral-500 hover:text-lime-400 transition-colors link-underline">About</a>
-        <a href="#interests" class="text-sm text-neutral-500 hover:text-lime-400 transition-colors link-underline">Interests</a>
-        <a href="#skills" class="text-sm text-neutral-500 hover:text-lime-400 transition-colors link-underline">Skills</a>
-        <a href="#journey" class="text-sm text-neutral-500 hover:text-lime-400 transition-colors link-underline">Journey</a>
-        <a href="#contact" class="text-sm font-bold bg-lime-400 text-neutral-900 px-6 py-2 rounded-full hover:bg-lime-300 hover:shadow-lg hover:shadow-lime-400/30 transition-all duration-300">Say Hello</a>
+        <a href="#about" class="text-sm text-neutral-500 hover:text-lime-400 transition-colors link-underline magnetic-btn">About</a>
+        <a href="#interests" class="text-sm text-neutral-500 hover:text-lime-400 transition-colors link-underline magnetic-btn">Interests</a>
+        <a href="#skills" class="text-sm text-neutral-500 hover:text-lime-400 transition-colors link-underline magnetic-btn">Skills</a>
+        <a href="#journey" class="text-sm text-neutral-500 hover:text-lime-400 transition-colors link-underline magnetic-btn">Journey</a>
+        <a href="#contact" class="magnetic-btn ripple-btn text-sm font-bold bg-lime-400 text-neutral-900 px-6 py-2 rounded-full hover:bg-lime-300 hover:shadow-lg hover:shadow-lime-400/30 transition-all duration-300">Say Hello</a>
       </div>
       <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-white/5 transition-colors text-white">
         <span class="iconify text-xl" data-icon="lucide:menu"></span>
@@ -405,30 +212,33 @@
     </div>
     <div id="mobile-menu" class="md:hidden hidden border-t border-white/5 bg-neutral-900/95 backdrop-blur-xl">
       <div class="px-6 py-4 flex flex-col gap-3">
-        <a href="#about" class="text-sm text-neutral-400 py-2 hover:text-lime-400 transition-colors">About</a>
-        <a href="#interests" class="text-sm text-neutral-400 py-2 hover:text-lime-400 transition-colors">Interests</a>
-        <a href="#skills" class="text-sm text-neutral-400 py-2 hover:text-lime-400 transition-colors">Skills</a>
-        <a href="#journey" class="text-sm text-neutral-400 py-2 hover:text-lime-400 transition-colors">Journey</a>
-        <a href="#contact" class="text-sm font-bold bg-lime-400 text-neutral-900 px-5 py-2.5 rounded-full text-center">Say Hello</a>
+        <a href="#about" class="text-sm text-neutral-400 py-2 hover:text-lime-400 transition-colors mobile-link">About</a>
+        <a href="#interests" class="text-sm text-neutral-400 py-2 hover:text-lime-400 transition-colors mobile-link">Interests</a>
+        <a href="#skills" class="text-sm text-neutral-400 py-2 hover:text-lime-400 transition-colors mobile-link">Skills</a>
+        <a href="#journey" class="text-sm text-neutral-400 py-2 hover:text-lime-400 transition-colors mobile-link">Journey</a>
+        <a href="#contact" class="text-sm font-bold bg-lime-400 text-neutral-900 px-5 py-2.5 rounded-full text-center mobile-link">Say Hello</a>
       </div>
     </div>
   </nav>
 
-  <!-- HERO SECTION -->
+  <!-- ========== HERO ========== -->
   <section class="min-h-screen mesh-bg relative overflow-hidden flex items-center">
-    <!-- Morph blobs (responsive sizes) -->
-    <div class="absolute top-20 right-10 w-64 h-64 md:w-96 md:h-96 bg-lime-500/8 morph-blob blur-sm animate-float"></div>
-    <div class="absolute bottom-10 left-10 w-80 h-80 md:w-[500px] md:h-[500px] bg-emerald-500/5 morph-blob blur-md animate-float2" style="animation-delay:-4s"></div>
-    <div class="absolute top-1/3 left-1/3 w-48 h-48 md:w-72 md:h-72 bg-yellow-500/5 morph-blob blur-sm animate-float" style="animation-delay:-8s"></div>
+    <!-- Orbs (responsive sizing already handled by CSS) -->
+    <div class="absolute top-20 right-10 w-96 h-96 bg-lime-500/8 morph-blob blur-sm animate-float"></div>
+    <div class="absolute bottom-10 left-10 w-[500px] h-[500px] bg-emerald-500/5 morph-blob blur-md animate-float2" style="animation-delay:-4s"></div>
+    <div class="absolute top-1/3 left-1/3 w-72 h-72 bg-yellow-500/5 morph-blob blur-sm animate-float" style="animation-delay:-8s"></div>
 
-    <!-- Orbital rings (hidden on mobile) -->
-    <div class="orbital-rings-container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none hidden md:block">
-      <div class="w-[700px] h-[700px] border border-white/[.03] rounded-full" style="animation: spinSlow 80s linear infinite"></div>
-      <div class="absolute inset-0 w-[500px] h-[500px] border border-lime-400/[.05] rounded-full m-auto" style="animation: spinSlow 55s linear infinite reverse"></div>
-      <div class="absolute inset-0 w-[300px] h-[300px] border border-white/[.03] rounded-full m-auto" style="animation: spinSlow 35s linear infinite"></div>
+    <!-- Orbital rings (hidden on mobile via CSS) -->
+    <div class="orbital-rings-container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+      <div class="w-[700px] h-[700px] border border-white/[.03] rounded-full" style="animation:spinSlow 80s linear infinite"></div>
+      <div class="absolute inset-0 w-[500px] h-[500px] border border-lime-400/[.05] rounded-full m-auto" style="animation:spinSlow 55s linear infinite reverse"></div>
+      <div class="absolute inset-0 w-[300px] h-[300px] border border-white/[.03] rounded-full m-auto" style="animation:spinSlow 35s linear infinite"></div>
+      <!-- Orbiting dots -->
+      <div style="animation:orbitDot 25s linear infinite" class="absolute top-1/2 left-1/2"><div class="w-2 h-2 bg-lime-400 rounded-full glow-pulse" style="animation:glowPulse 2s ease-in-out infinite"></div></div>
+      <div style="animation:orbitDot2 18s linear infinite" class="absolute top-1/2 left-1/2"><div class="w-1.5 h-1.5 bg-emerald-400/60 rounded-full"></div></div>
     </div>
 
-    <!-- Grid overlay -->
+    <!-- Grid -->
     <div class="absolute inset-0 opacity-[0.02]" style="background-image:radial-gradient(#fff 1px,transparent 1px);background-size:30px 30px"></div>
 
     <div class="max-w-7xl mx-auto px-6 lg:px-8 py-24 lg:py-32 relative z-10 w-full">
@@ -441,13 +251,13 @@
             </div>
           </div>
 
-          <h1 class="hero-title obs-hidden animate-fade-up delay-100 text-5xl sm:text-7xl lg:text-[5.5rem] font-black tracking-[-.05em] leading-[1.1] mb-6">
+          <h1 class="obs-hidden animate-fade-up delay-100 text-5xl sm:text-7xl lg:text-[5.5rem] font-black tracking-[-.05em] leading-[.9] mb-6 hero-title">
             Hi, I'm<br>
             <span class="shimmer-text">Hamza</span><br>
             <span class="text-neutral-700">Nasir</span>
           </h1>
 
-          <p class="hero-subtitle obs-hidden animate-fade-up delay-200 text-lg lg:text-xl text-neutral-500 leading-relaxed max-w-lg mb-4">
+          <p class="obs-hidden animate-fade-up delay-200 text-lg lg:text-xl text-neutral-500 leading-relaxed max-w-lg mb-4">
             A <span class="text-lime-400 font-semibold">15-year-old</span> curious mind passionate about
             <span class="text-white/80 font-medium">technology</span>,
             <span class="text-white/80 font-medium">creativity</span>, and
@@ -455,15 +265,15 @@
           </p>
 
           <div class="obs-hidden animate-fade-up delay-300 mb-10">
-            <span class="typing-text text-sm font-mono text-neutral-400">building_the_future_one_line_at_a_time</span>
+            <span class="typing-text text-sm font-mono text-neutral-600">building_the_future_one_line_at_a_time</span>
           </div>
 
           <div class="obs-hidden animate-fade-up delay-400 flex flex-wrap items-center gap-4">
-            <a href="#about" class="inline-flex items-center gap-2 bg-lime-400 text-neutral-900 text-sm font-extrabold px-8 py-4 rounded-full hover:bg-lime-300 hover:shadow-2xl hover:shadow-lime-400/25 hover:-translate-y-1 transition-all duration-300">
+            <a href="#about" class="magnetic-btn ripple-btn inline-flex items-center gap-2 bg-lime-400 text-neutral-900 text-sm font-extrabold px-8 py-4 rounded-full hover:bg-lime-300 hover:shadow-2xl hover:shadow-lime-400/25 hover:-translate-y-1 transition-all duration-300">
               Explore My World
               <span class="iconify" data-icon="lucide:chevron-down"></span>
             </a>
-            <a href="#contact" class="inline-flex items-center gap-2 text-sm font-semibold text-neutral-400 px-6 py-4 rounded-full border border-white/10 hover:border-lime-400/40 hover:text-lime-400 hover:bg-lime-400/5 transition-all duration-300">
+            <a href="#contact" class="magnetic-btn inline-flex items-center gap-2 text-sm font-semibold text-neutral-400 px-6 py-4 rounded-full border border-white/10 hover:border-lime-400/40 hover:text-lime-400 hover:bg-lime-400/5 transition-all duration-300">
               <span class="iconify" data-icon="lucide:mail"></span>
               Get in Touch
             </a>
@@ -473,31 +283,4 @@
             <span class="text-[10px] text-neutral-600 uppercase tracking-[.2em]">Find me</span>
             <div class="w-10 h-px bg-neutral-800"></div>
             <div class="flex gap-3">
-              <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-neutral-600 hover:text-lime-400 hover:border-lime-400/40 hover:bg-lime-400/5 hover:scale-110 transition-all duration-300"><span class="iconify text-base" data-icon="lucide:github"></span></a>
-              <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-neutral-600 hover:text-lime-400 hover:border-lime-400/40 hover:bg-lime-400/5 hover:scale-110 transition-all duration-300"><span class="iconify text-base" data-icon="lucide:twitter"></span></a>
-              <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-neutral-600 hover:text-lime-400 hover:border-lime-400/40 hover:bg-lime-400/5 hover:scale-110 transition-all duration-300"><span class="iconify text-base" data-icon="lucide:instagram"></span></a>
-              <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-neutral-600 hover:text-lime-400 hover:border-lime-400/40 hover:bg-lime-400/5 hover:scale-110 transition-all duration-300"><span class="iconify text-base" data-icon="lucide:linkedin"></span></a>
-            </div>
-          </div>
-        </div>
-        <div class="hidden lg:block relative">
-          <div class="w-full h-full flex justify-center items-center">
-            <div class="w-80 h-80 rounded-full gradient-border flex items-center justify-center animate-float">
-              <span class="iconify text-8xl text-lime-400/80" data-icon="lucide:code-2"></span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ABOUT SECTION -->
-  <section id="about" class="py-28 px-6 lg:px-8 relative bg-black/40">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-16">
-        <span class="text-lime-400 text-sm font-mono tracking-wider">✦ ABOUT ME ✦</span>
-        <h2 class="text-4xl md:text-5xl font-bold mt-4">Curious. Creative.<br><span class="text-lime-400">Driven.</span></h2>
-      </div>
-      <div class="grid md:grid-cols-2 gap-12 items-center">
-        <div class="space-y-5 text-neutral-400 leading-relaxed">
-          <p>I'm Hamza, a 15-year-old innov
+              <a href="#" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-neutral-600 hover:text-lime-400 hover:border-lime-400/40 hover:bg-lime-400/5 hover:scale-110 transition-all duratio
